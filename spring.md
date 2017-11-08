@@ -19,5 +19,5 @@
 4. 切面: 本身是一种操作，把增强应用到切入点上的过程就叫切面
 
 ###&emsp;3.3 aop操作
-1. [aop的xml配置](images/spring/aop/aop_xml.png)
-2. [aop运行](images/spring/aop/run_aop.png)
+1. [aop的xml配置](https://github.com/gjsuper/markdown/blob/master/images/spring/aop/aop_xml.png)
+2. [aop运行](https://github.com/gjsuper/markdown/blob/master/images/spring/aop/run_aop.png)
