@@ -8,7 +8,7 @@
 2. COnsumer API订阅一个或多个topic，并处理产生的消息
 3. Streams API充当流处理器，从1个或多个topic消费输入流，并产生一个输出流到1个或多个topic，有效的将输入流转换为输出流
 4. Connector API允许构建或运行可重复使用的生产者或消费者，将topic连接到现有的应用程序或数据系统。例如一个关系数据库的连接器科捕获每一个变化
-见图所示:[api图](images\kafka\coreApi.png)
+见图所示:[api图](https://github.com/gjsuper/markdown/blob/master/images/kafka/coreApi.png)
 
 ##三.kafka读写高效的原因
 1. 一般将数据从文件传到套接字的路径：
@@ -27,6 +27,9 @@
 消费： 磁盘 -> 网络
 
 ##四.kafka消息检索原理
-kafka利用index文件存储消息是第几条，以及该消息的偏移量
-
+1. kafka利用index文件存储消息是第几条，以及该消息的偏移量
+[kafka消息检索原理](https://github.com/gjsuper/markdown/blob/master/images/kafka/%E6%B6%88%E6%81%AF%E6%A3%80%E7%B4%A2.PNG)
+2. kafka定位某条消息的过程
+ - 利用消息的offset定位消息所在的segment file文件（二分查找）
+ - 再次利用消息的offset和index文件找到该的消息（二分查找）
 
