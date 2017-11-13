@@ -33,3 +33,5 @@
  - 利用消息的offset定位消息所在的segment file文件（二分查找）
  - 再次利用消息的offset和index文件找到该的消息（二分查找）
 
+##四.参考文献
+1. [kafka简介](https://www.cnblogs.com/likehua/p/3999538.html)
