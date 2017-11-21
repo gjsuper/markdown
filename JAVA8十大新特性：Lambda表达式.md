@@ -109,7 +109,7 @@ public class Sub implements Base1, Base2 {
 
 
 ##四.构造方法引用
-构造方法引用与方法引用类似，除了一点，就是构造方法引用的方法是new!以下是两个示例.
+构造方法引用与方法引用类似，除了一点，就是构造 方法引用的方法是new!以下是两个示例.
 示例一：
 ```java
 String str = "test";
