@@ -1,8 +1,9 @@
-#JAVA8十大新特性：Lambda表达式
+# JAVA8十大新特性：Lambda表达式
 
-##一.Lambda表达式
+## 一.Lambda表达式
 1. 什么是Lambda表达式
-	<pre> a function (or a subroutine) defined, and possibly called, without being bound to an identifier。
+	<pre>
+	a function (or a subroutine) defined, and possibly called, without being bound to an identifier。
     一个不用被绑定到一个标识符上，并且可能被调用的函数
     简单理解就是 一段带有输入参数的可执行语句块
     </pre>
@@ -15,10 +16,11 @@
             System.out.println("This is from an anonymous class.");
         }
     } );
-    
+
     Thread gaoDuanDaQiShangDangCi = new Thread( () -> {
         System.out.println("This is from an anonymous method (lambda exp).");
-    } );```
+    } );
+	```
     * Lambda表达式与批处理
     集合类（包括List）现在都有一个forEach方法，对元素进行迭代（遍历），所以我们不需要再写for循环了。forEach方法接受一个函数接口Consumer做参数，所以可以使用λ表达式。例如：
    ```java
@@ -30,9 +32,9 @@
      ```java
      list.forEach(o -> {System.out.println(o);}); //forEach函数实现内部迭代
     ```
-    
+
     还有可以用于Stream
-    
+
 1. Lambda表达式的类型
 	* Lambda表达式的目标类型是“函数接口”，“函数接口”的定义是：如果一个接口只有一个显示声明的抽象方法，那么他就是一个函数接口。可以用@FunctionalInterface标注出来（也可以不标）。举例如下：
     ```java
@@ -41,7 +43,7 @@
     public interface Callable<V> { V call() throws Exception; }
     public interface ActionListener { void actionPerformed(ActionEvent e); }
     ```
-    * 
+    *
 1. Lambda表达式语法
  * Lambda表达式形象化表示如下：
  <pre>Parameters -> expression</pre>
@@ -68,8 +70,8 @@ Arrays.sort(datas,(v1, v2) -> Integer.compare(v1.length(), v2.length()));
  ```
  * Lambda表达式的返回类型，无需指定，编译器会自行推断，说是自行推断
  * Lambda表达式的参数可以使用修饰符及注解，如*final*、*@NonNull*等
- 
-##二.函数式接口
+
+## 二.函数式接口
 1. 什么是函数式接口
 	函数式接口具有两个主要特征，是一个接口，这个接口具有唯一的一个抽像方法，我们将满足这两个特性的接口称为函数式接口
 1. Lambda表达式不能脱离目标类型存在，这个目录类型就是函数式接口，所下所示是一个样例：
@@ -77,7 +79,7 @@ Arrays.sort(datas,(v1, v2) -> Integer.compare(v1.length(), v2.length()));
 String []datas = new String[] {"peng","zhao","li"};
 Comparator<String> comp = (v1,v2) -> Integer.compare(v1.length(), v2.length());
 Arrays.sort(datas,comp);
-Stream.of(datas).forEach(param -> {System.out.println(param);}); 
+Stream.of(datas).forEach(param -> {System.out.println(param);});
 ```
 Lambda表达式被赋值给了comp函数接口变量
 1. 函数式接口可以使用 *@FunctionalInterface* 标注，标注的好处是可以使知道这是一个函数式接口，同时在生成java doc时会进行显示标注。
