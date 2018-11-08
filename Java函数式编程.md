@@ -24,18 +24,43 @@ public Map<Artist, Long> numberOfAlbums(Stream<Album> albums) {
 ```
 
 * mappping允许在收集器的容器上执行类似map的操作。但是需要知名使用什么样的集合来存储结果。eg:使用收集器求每个艺术家的专辑名：
-：
 ```java
 public Map<Artist, List<String>> nameOfAlbums(Stream<Album> albums) {
     return balbums.collect(groupingBy(Album::getMainMusician, mapping(Album::getName, toList)))
 }
-```
+```
+
+* 统计信息
+
+```java
+public static void printTrackLengthStatistics(Album album) {
+    IntSummaryStatistics trackLengthStats = album.getTracks()
+                        .mapToInt(track -> track.getLength())
+                        .summaryStatistics();
+         System.out.printf("Max: %d, Min: %d, Ave: %f, Sum: %d",
+                           trackLengthStats.getMax(),
+                           trackLengthStats.getMin(),
+                           trackLengthStats.getAverage(),
+                           trackLengthStats.getSum());
+}
+```
+
+* partitionBy:Map<Boolean, Object>
+```java
+public Map<Boolean, List<Artist>> bandsAndSoloRef(Stream<Artist> artists) {
+    return artists.collect(partitioningBy(Artist::isSolo));
+}
+```
 
 * reduce和StringCombiner：
 ```java
     StringCombiner combined = artists.stream.map(Artist::getName).reduce(new StringCombiner(", ", "[", "]"), StringCombiner::add, StringCombiner::merge);
 
     String res = combined.toString();
+
+    String result =artists.stream()
+                   .map(Artist::getName)
+                   .collect(Collectors.joining(", ", "[", "]"));
 ```
 
 * 并行化处理时避免使用无法判断结尾的数据结构（LinkedList，Streams.iterate）和有状态的操作（sored、limit、distinct）
@@ -45,4 +70,4 @@ public Map<Artist, List<String>> nameOfAlbums(Stream<Album> albums) {
     - parallelSort：并行化对数组元素排序
 * stream 中的peak可以让你查看每个值，并且能继续操作流。
 * stream 中的allMatch返回一个boolean值，判断流中的所有元素是否都满足某个条件，如果都满足返回true，否则返回false。
-* 
+*
