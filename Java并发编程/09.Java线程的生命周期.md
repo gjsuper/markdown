@@ -1,0 +1,60 @@
+# 09.Java线程的生命周期
+
+###通用的线程生命周期
+[通用线程状态转换图-五态模型](../images/Java并发/通用线程状态转换图-五态模型.png)
+
+### java 线程中的生命周期
+
+java 中线程有六种状态：
+
+1. NEW（初始化状态）
+2. RUNNABLE（可运行状态）
+3. BLOCKED(阻塞状态)
+4. WAITING（无限时等待状态）
+5. TIMED_WAITING(有限时等待)
+6. TERMINATAED（终止状态）
+
+
+[java中的线程状态转换图](../images/Java并发/java中的线程状态转换图.png)
+
+java线程中的BLOCKED、WAITING、TIMED_WAITING是一种状态，也就是第一个图里的休眠状态。
+
+#### 1.Runnable 与 BLOCKED状态的转换
+
+只有一种场景会出触发这种转换：线程等待的synchronized的隐式锁，没获取到锁的时候，等到的线程会从Runnable转换到BLOCKED状态，当获得隐式锁的时候，也会从BLOCKED状态转换到RUNNABLE状态
+
+线程调用阻塞API时，是否会转换到BLOCKED状态呢？在操作系统层面，线程是会转换到休眠状态的，但在JAVA层面，JAVA线程的状态并不会发生变化，依然保持在RUNNABLE状态。**JVM层面并不关心操作系统调度相关的状态，因为在JVM看来，等待CPU使用权（系统层面处于可执行状态）与等待IO（操作系统层面处于休眠状态）没有区别，都是在等待某个资源，所以都归入了RUNNABLE状态**
+
+
+#### 2. RUNNABLE 与 WAITING状态的转换
+
+第一种：获得synchronized隐式锁的时候，调用无参的Object.wait()
+第二种：调用无参的Thread.join方法，执行完后会从WAITING状态转回RUNNABLE状态
+第三种：调用LockSupport.park，java并发包的锁就是基于它实现的，此时线程会阻塞，调用LockSupport.unpark会从WAITING状态转换到RUNNABLE状态
+
+#### 3. RUNNABLE与TIMED_WAITED状态的转换
+
+1. 调用带参的 Thread.sleep(time)
+2. 获得synchronized的隐式锁的时候，使用带参的Object.wait(time)
+3. 调用带参的LockSupport.parkNanos(Object blocker, long deadline)
+4. 调用带参的LockSupport.parkUntil(long dealine)
+5. 调用带参的Thread.sleep(long milles)
+
+#### 4. 从NEW到RUNNABLE
+创建线程后代用start方法
+
+#### 5. 从RUNNABLE到TERMINATED状态
+线程执行完或者异常抛出。
+
+如果不想让线程等待太久，可以让线程中断，有stop和interrupt两种方法，推荐使用interrupt方法
+
+#### stop和interrupt的区别
+stop真的会杀死线程，不给线程喘息的机会，如果线程持有synchronized隐式锁，也不会释放，那么其他下线程就再也没机会获得锁了，很危险。
+
+interrupt()仅仅是通知线程，线程通过两种方式手动通知，一是异常，二是主动检测
+
+当线程处于WAITING、TIMED_WAITING时，调用线程A的interrupt方法，回事线程A返回到RUNNABLE状态，同时抛出InterruptedEXception 异常，所以wait(),join(),sleep()之类的方法有时会看到InterruptedException异常
+
+当线程处于RUNNABLE状态时，如果阻塞在java.nio.channels.InterruptibleChannel上时，调用interrupt方法，会触发java.nio.channels.ClosedByInterruptException这个异常。
+如果阻塞在java.nio.channels.Selector，调用interrupt方法，线程A上的java.nio.channels.Selector会立即返回。
+如果没有阻塞的话，那么线程就可以通过isInterrupted()方法，自己检测是否被中断了。
